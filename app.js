@@ -7,6 +7,8 @@ let elementoResultList;
 let elementoLi;
 let indiceAleatorio;
 let amigoSecreto;
+let nombreAmigo;
+let datosValidados;
 conexionesIniciales();
 estadosIniciales();
 function conexionesIniciales(){
@@ -25,23 +27,42 @@ function estadosIniciales(){
     });
 }
 function agregarAmigo(){
-    listaAmigos.push(elementoInputName.value);
-    elementoLi=document.createElement('li');
-    elementoLi.appendChild(document.createTextNode(listaAmigos[listaAmigos.length-1]));
-    elementoNameList.appendChild(elementoLi);
+    datosValidados=validacionDatos();
+    if(datosValidados){
+        listaAmigos.push(elementoInputName.value);
+        elementoLi=document.createElement('li');
+        elementoLi.appendChild(document.createTextNode(listaAmigos[listaAmigos.length-1]));
+        elementoNameList.appendChild(elementoLi);
+    }
+    else{
+        alert('Por favor, ingrese un nombre válido');
+    }
     limpiarInputName();
+}
+
+function validacionDatos(){
+    nombreAmigo=elementoInputName.value;
+    if(nombreAmigo.length ==0 || /[0-9]/.test(nombreAmigo))
+        return false;
+    else
+        return true; 
 }
 function limpiarInputName(){
     elementoInputName.value='';
     elementoInputName.focus();    
 }
 function sortearAmigo(){
+    if(listaAmigos.length!=0){
     indiceAleatorio= generarIndiceAleatorioLista(listaAmigos.length);
     amigoSecreto=listaAmigos[indiceAleatorio];
     elementoNameList.hidden = true;
     elementoLi=document.createElement('li');
     elementoLi.appendChild(document.createTextNode(`El amigo secreto sorteado es: ${amigoSecreto}`));
     elementoResultList.appendChild(elementoLi);
+    }
+    else{
+        alert('Aún no ingresó amigos a la lista');
+    }
 }
 function generarIndiceAleatorioLista(n){
     return Math.floor(Math.random()*n);
